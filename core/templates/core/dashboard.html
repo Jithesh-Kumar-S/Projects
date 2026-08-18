@@ -1,0 +1,77 @@
+{% extends "core/base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3>Your Dashboard</h3>
+    <div>
+        <span class="badge bg-success credit-badge">💰 {{ profile.credits }} credits</span>
+        <a href="{% url 'profile_edit' %}" class="btn btn-sm btn-outline-secondary ms-2">Edit Profile</a>
+        <a href="{% url 'listing_create' %}" class="btn btn-sm btn-primary ms-2">+ New Listing</a>
+    </div>
+</div>
+
+{% if pending_received %}
+<div class="alert alert-warning">
+    You have {{ pending_received.count }} incoming request(s) waiting for a response.
+    <a href="{% url 'request_list' %}">Review them &raquo;</a>
+</div>
+{% endif %}
+
+<div class="row">
+    <div class="col-md-7">
+        <h5>🔮 Recommended for you</h5>
+        <p class="text-muted small">Matched to your "skills needed" using ML (TF-IDF + cosine similarity).</p>
+        {% for listing in recommended_listings %}
+        <div class="card mb-2 shadow-sm">
+            <div class="card-body py-2">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <a href="{% url 'listing_detail' listing.pk %}"><strong>{{ listing.title }}</strong></a>
+                        <div class="small text-muted">by {{ listing.user.username }} · {{ listing.get_category_display }}</div>
+                    </div>
+                    <a href="{% url 'listing_detail' listing.pk %}" class="btn btn-sm btn-outline-primary align-self-center">View</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-muted">Add some "skills needed" to your profile to get matches.</p>
+        {% endfor %}
+
+        {% if recommended_people %}
+        <h6 class="mt-4">People whose skills match what you need</h6>
+        <ul class="list-group">
+            {% for person in recommended_people %}
+            <li class="list-group-item"><a href="{% url 'public_profile' person.username %}">{{ person.username }}</a></li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+
+    <div class="col-md-5">
+        <h5>Your Listings</h5>
+        {% for listing in my_listings %}
+        <div class="card mb-2">
+            <div class="card-body py-2 d-flex justify-content-between align-items-center">
+                <a href="{% url 'listing_detail' listing.pk %}">{{ listing.title }}</a>
+                <span class="badge {% if listing.is_active %}bg-success{% else %}bg-secondary{% endif %}">
+                    {% if listing.is_active %}active{% else %}inactive{% endif %}
+                </span>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-muted">You haven't listed any services yet.</p>
+        {% endfor %}
+
+        <h5 class="mt-4">Active Exchanges</h5>
+        {% for ex in active_exchanges %}
+        <div class="card mb-2">
+            <div class="card-body py-2">
+                <a href="{% url 'request_detail' ex.pk %}">{{ ex.listing.title }}</a>
+                <span class="badge bg-info text-dark">{{ ex.get_status_display }}</span>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-muted">No active exchanges right now.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

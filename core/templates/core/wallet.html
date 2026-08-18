@@ -1,0 +1,21 @@
+{% extends "core/base.html" %}
+{% block content %}
+<h3>Your Wallet</h3>
+<h4 class="mb-4">💰 Balance: {{ profile.credits }} credits</h4>
+
+<table class="table table-striped bg-white">
+    <thead><tr><th>Date</th><th>Type</th><th>Amount</th><th>Note</th></tr></thead>
+    <tbody>
+    {% for t in transactions %}
+        <tr>
+            <td>{{ t.created_at|date:"M d, Y H:i" }}</td>
+            <td>{{ t.get_transaction_type_display }}</td>
+            <td class="{% if t.amount > 0 %}text-success{% else %}text-danger{% endif %}">{{ t.amount|stringformat:"+d" }}</td>
+            <td>{{ t.note }}</td>
+        </tr>
+    {% empty %}
+        <tr><td colspan="4" class="text-muted">No transactions yet.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

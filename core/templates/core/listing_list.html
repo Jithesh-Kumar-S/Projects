@@ -1,0 +1,41 @@
+{% extends "core/base.html" %}
+{% block content %}
+<h3 class="mb-3">Browse Services</h3>
+<form method="get" class="row g-2 mb-4">
+    <div class="col-md-5">
+        <input type="text" name="q" value="{{ query }}" class="form-control" placeholder="Search title, description, skills...">
+    </div>
+    <div class="col-md-3">
+        <select name="category" class="form-select">
+            <option value="">All categories</option>
+            {% for key, label in categories %}
+            <option value="{{ key }}" {% if category == key %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-3">
+        <input type="text" name="location" value="{{ location }}" class="form-control" placeholder="Location">
+    </div>
+    <div class="col-md-1">
+        <button class="btn btn-primary w-100" type="submit">Go</button>
+    </div>
+</form>
+
+<div class="row">
+    {% for listing in listings %}
+    <div class="col-md-4 mb-3">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <span class="badge bg-light text-dark mb-2">{{ listing.get_category_display }}</span>
+                <h5>{{ listing.title }}</h5>
+                <p class="text-muted small">{{ listing.description|truncatewords:15 }}</p>
+                <p class="small">⏱ {{ listing.duration_hours }}h · 📍 {{ listing.location|default:"anywhere" }}</p>
+                <a href="{% url 'listing_detail' listing.pk %}" class="btn btn-sm btn-outline-primary">View</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p class="text-muted">No listings match your search.</p>
+    {% endfor %}
+</div>
+{% endblock %}

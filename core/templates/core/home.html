@@ -1,0 +1,27 @@
+{% extends "core/base.html" %}
+{% block content %}
+<div class="p-5 mb-4 bg-white rounded-3 shadow-sm">
+    <h1 class="display-6">Trade skills, not cash.</h1>
+    <p class="lead">List a service you can offer, browse what your community needs, and swap time instead of money — 1 hour of work = 1 credit.</p>
+    <a href="{% url 'signup' %}" class="btn btn-primary btn-lg">Get Started</a>
+    <a href="{% url 'listing_list' %}" class="btn btn-outline-secondary btn-lg">Browse Services</a>
+</div>
+
+<h4 class="mb-3">Recently listed</h4>
+<div class="row">
+    {% for listing in recent %}
+    <div class="col-md-4 mb-3">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <span class="badge bg-light text-dark mb-2">{{ listing.get_category_display }}</span>
+                <h5 class="card-title">{{ listing.title }}</h5>
+                <p class="card-text text-muted">{{ listing.description|truncatewords:15 }}</p>
+                <a href="{% url 'listing_detail' listing.pk %}" class="btn btn-sm btn-outline-primary">View</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p class="text-muted">No listings yet — be the first!</p>
+    {% endfor %}
+</div>
+{% endblock %}

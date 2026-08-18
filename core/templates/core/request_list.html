@@ -1,0 +1,34 @@
+{% extends "core/base.html" %}
+{% block content %}
+<h3 class="mb-3">My Exchanges</h3>
+<div class="row">
+    <div class="col-md-6">
+        <h5>Received (people requesting your services)</h5>
+        {% for ex in received %}
+        <div class="card mb-2">
+            <div class="card-body py-2 d-flex justify-content-between align-items-center">
+                <div>
+                    <a href="{% url 'request_detail' ex.pk %}">{{ ex.listing.title }}</a>
+                    <div class="small text-muted">from {{ ex.requester.username }}</div>
+                </div>
+                <span class="badge bg-secondary">{{ ex.get_status_display }}</span>
+            </div>
+        </div>
+        {% empty %}<p class="text-muted">Nothing yet.</p>{% endfor %}
+    </div>
+    <div class="col-md-6">
+        <h5>Sent (services you requested)</h5>
+        {% for ex in sent %}
+        <div class="card mb-2">
+            <div class="card-body py-2 d-flex justify-content-between align-items-center">
+                <div>
+                    <a href="{% url 'request_detail' ex.pk %}">{{ ex.listing.title }}</a>
+                    <div class="small text-muted">to {{ ex.provider.username }}</div>
+                </div>
+                <span class="badge bg-secondary">{{ ex.get_status_display }}</span>
+            </div>
+        </div>
+        {% empty %}<p class="text-muted">Nothing yet.</p>{% endfor %}
+    </div>
+</div>
+{% endblock %}

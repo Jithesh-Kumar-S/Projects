@@ -1,0 +1,32 @@
+{% extends "core/base.html" %}
+{% block content %}
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h4>{{ person.username }}</h4>
+        {% if profile.average_rating %}<p>⭐ {{ profile.average_rating }} / 5</p>{% endif %}
+        <p class="text-muted">{{ profile.location }}</p>
+        <p>{{ profile.bio }}</p>
+        <p><strong>Offers:</strong> {{ profile.skills_offered|default:"—" }}</p>
+    </div>
+</div>
+
+<h5>Active Listings</h5>
+<div class="row">
+    {% for listing in listings %}
+    <div class="col-md-4 mb-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <h6>{{ listing.title }}</h6>
+                <p class="small text-muted">{{ listing.description|truncatewords:15 }}</p>
+                <a href="{% url 'listing_detail' listing.pk %}" class="btn btn-sm btn-outline-primary">View</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}<p class="text-muted">No active listings.</p>{% endfor %}
+</div>
+
+<h5 class="mt-4">Reviews</h5>
+{% for r in ratings %}
+<div class="border-bottom py-2">{{ r.stars }}⭐ — {{ r.review }} <span class="text-muted small">({{ r.from_user.username }})</span></div>
+{% empty %}<p class="text-muted">No reviews yet.</p>{% endfor %}
+{% endblock %}
