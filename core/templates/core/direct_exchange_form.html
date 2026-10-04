@@ -1,0 +1,29 @@
+{% extends "core/base.html" %}
+{% block title %}Direct Skill Exchange{% endblock %}
+{% block content %}
+<style>
+    .direct-card{max-width:760px;margin:1.5rem auto;border:1px solid #e2e8f0;border-radius:18px;box-shadow:0 16px 42px #17255412}.direct-summary{background:linear-gradient(135deg,#eef2ff,#ecfeff);border:1px solid #dbeafe;border-radius:14px;padding:1.2rem}.direct-summary strong{color:#312e81}.exchange-arrow{color:#4f46e5;font-weight:700}.direct-card .form-select,.direct-card textarea{border-radius:10px}
+</style>
+<section class="card direct-card"><div class="card-body p-4 p-md-5">
+    <span class="badge text-bg-primary mb-2">Direct Skill Exchange</span>
+    <h1 class="h3">Exchange skills with {{ listing.user.username }}</h1>
+    <p class="text-muted">Offer one of your teaching skills for a skill in {{ listing.title }}. No credits are used.</p>
+    {% if not offered_skills %}<div class="alert alert-info">Add skills you can teach in <a href="{% url 'profile_edit' %}">your profile</a> before requesting a direct exchange.</div>{% endif %}
+    {% if form.errors %}<div class="alert alert-danger" role="alert">Please choose skills from the available lists and try again.</div>{% endif %}
+    <form method="post" id="direct-exchange-form">
+        {% csrf_token %}
+        <div class="mb-3"><label class="form-label fw-semibold" for="{{ form.offered_skill.id_for_label }}">What can you offer in exchange?</label>{{ form.offered_skill }}{% for error in form.offered_skill.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}</div>
+        <div class="mb-3"><label class="form-label fw-semibold" for="{{ form.requested_skill.id_for_label }}">What do you want to learn?</label>{{ form.requested_skill }}{% for error in form.requested_skill.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}</div>
+        <div class="mb-4"><label class="form-label" for="{{ form.message.id_for_label }}">Message (optional)</label>{{ form.message }}{% for error in form.message.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}</div>
+        <div class="direct-summary mb-4" aria-live="polite">
+            <div class="fw-semibold mb-2">Exchange summary</div>
+            <div><span id="summary-offer">{{ offered_skills.0|default:"Choose a skill" }}</span> <span class="exchange-arrow">↔</span> <span id="summary-request">{{ requested_skills.0|default:"Choose a skill" }}</span></div>
+            <div class="small text-muted mt-1">With {{ listing.user.username }} · Credits required: <strong>0</strong></div>
+        </div>
+        <div class="d-flex flex-wrap gap-2"><button class="btn btn-primary" type="submit" {% if not offered_skills or not requested_skills %}disabled{% endif %}>Send Exchange Request</button><a class="btn btn-outline-secondary" href="{% url 'listing_detail' listing.pk %}">Back</a></div>
+    </form>
+</div></section>
+<script>
+(function(){const offer=document.getElementById('{{ form.offered_skill.id_for_label }}'),want=document.getElementById('{{ form.requested_skill.id_for_label }}');function update(){document.getElementById('summary-offer').textContent=offer.options[offer.selectedIndex]?.text||'Choose a skill';document.getElementById('summary-request').textContent=want.options[want.selectedIndex]?.text||'Choose a skill'}offer.addEventListener('change',update);want.addEventListener('change',update);update()})();
+</script>
+{% endblock %}

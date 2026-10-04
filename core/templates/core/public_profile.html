@@ -1,0 +1,34 @@
+{% extends "core/base.html" %}
+{% block content %}
+<div class="card profile-hero shadow-sm mb-4">
+    <div class="card-body">
+        <h4>{{ person.username }}</h4>
+        <p aria-label="{% if rating_count %}{{ rating_average }} out of 5, based on {{ rating_count }} reviews{% else %}No reviews yet{% endif %}">{% if rating_count %}⭐ {{ rating_average }} / 5 · {{ rating_count }} review{{ rating_count|pluralize }}{% else %}No reviews yet{% endif %}</p>
+        {% if profile.profile_picture %}<img src="{{ profile.profile_picture }}" alt="{{ person.username }}’s profile" class="rounded-circle mb-3" width="96" height="96" style="object-fit:cover">{% endif %}
+        <p class="text-muted">{{ profile.location }}{% if profile.experience_level %} · {{ profile.get_experience_level_display }}{% endif %}{% if profile.availability %} · {{ profile.availability }}{% endif %}</p>
+        <p>{{ profile.bio }}</p>
+        <p><strong>Offers:</strong> {{ profile.skills_offered|default:"—" }}</p>
+    </div>
+</div>
+
+<h5>Active Listings</h5>
+<div class="row">
+    {% for listing in listings %}
+    <div class="col-md-4 mb-3">
+        <div class="card skill-card h-100">
+            <div class="card-body">
+                <h6>{{ listing.title }}</h6>
+                <p class="small">{% if listing.review_count %}⭐ {{ listing.rating_average|floatformat:1 }} / 5 · {{ listing.review_count }} review{{ listing.review_count|pluralize }}{% else %}No reviews yet{% endif %}</p>
+                <p class="small text-muted">{{ listing.description|truncatewords:15 }}</p>
+                <a href="{% url 'listing_detail' listing.pk %}" class="btn btn-sm btn-outline-primary">View</a>
+            </div>
+        </div>
+    </div>
+{% empty %}<p class="empty-state col-12">No active listings.</p>{% endfor %}
+</div>
+
+<h5 class="mt-4">Reviews</h5>
+{% for r in ratings %}
+<div class="review-card"><span class="rating-mark" aria-label="{{ r.stars }} out of 5 stars">{{ r.stars }}⭐</span> — {{ r.review }} <span class="text-muted small">({{ r.from_user.username }} · {{ r.created_at|date:"M j, Y" }})</span></div>
+{% empty %}<p class="empty-state">No reviews yet.</p>{% endfor %}
+{% endblock %}

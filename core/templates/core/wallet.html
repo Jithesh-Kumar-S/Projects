@@ -1,0 +1,175 @@
+
+{% extends "core/base.html" %}
+
+{% block content %}
+
+<style>
+    .wallet-balance {
+        padding: 1.15rem 1.35rem;
+        margin-bottom: 1.5rem;
+        border: 1px solid #e4e9f2;
+        border-radius: 16px;
+        background: linear-gradient(135deg, #f7f8ff, #eef5ff);
+        box-shadow: 0 10px 28px rgba(25, 39, 75, .06);
+    }
+
+    .wallet-balance h4 {
+        margin: 0;
+        color: #17223b;
+        font-weight: 700;
+    }
+
+    .wallet-table {
+        overflow: hidden;
+        border: 1px solid #e4e9f2;
+        border-radius: 18px;
+        background: #fff;
+        box-shadow: 0 12px 34px rgba(25, 39, 75, .07);
+    }
+
+    .wallet-table table {
+        margin: 0;
+    }
+
+    .wallet-table thead th {
+        padding: .9rem 1rem;
+        color: #59667e;
+        background: #f7f8fc;
+        border-bottom: 1px solid #e4e9f2;
+        font-size: .8rem;
+        text-transform: uppercase;
+        letter-spacing: .04em;
+        white-space: nowrap;
+    }
+
+    .wallet-table tbody td {
+        padding: .9rem 1rem;
+        vertical-align: middle;
+    }
+
+    .wallet-table tbody tr:last-child td {
+        border-bottom: 0;
+    }
+
+    .wallet-table tbody tr:hover {
+        background-color: #f8f9fd;
+    }
+
+    /* DARK MODE */
+
+    body.dark-mode .wallet-balance {
+        background: linear-gradient(135deg, #1b2336, #202b43);
+        border-color: #303a50;
+        box-shadow: 0 14px 34px rgba(0, 0, 0, .2);
+    }
+
+    body.dark-mode .wallet-balance h4 {
+        color: #ffffff !important;
+    }
+
+    body.dark-mode .wallet-table {
+        background: #1b2336;
+        border-color: #303a50;
+        box-shadow: 0 14px 34px rgba(0, 0, 0, .2);
+    }
+
+    body.dark-mode .wallet-table table {
+        --bs-table-bg: #1b2336;
+        --bs-table-color: #edf2ff;
+        --bs-table-striped-bg: #202a3e;
+        --bs-table-striped-color: #edf2ff;
+        --bs-table-hover-bg: #252f46;
+        --bs-table-hover-color: #ffffff;
+        --bs-table-border-color: #303a50;
+
+        color: #edf2ff;
+        background-color: #1b2336;
+    }
+
+    body.dark-mode .wallet-table thead th {
+        color: #aeb9ce;
+        background: #151d2e;
+        border-color: #303a50;
+    }
+
+    body.dark-mode .wallet-table tbody td {
+        color: #edf2ff;
+        border-color: #303a50;
+    }
+
+    body.dark-mode .wallet-table tbody tr:hover {
+        background-color: #252f46;
+    }
+
+    body.dark-mode .wallet-table .text-success {
+        color: #55d69a !important;
+    }
+
+    body.dark-mode .wallet-table .text-danger {
+        color: #ff7f8e !important;
+    }
+
+    body.dark-mode .wallet-table .text-muted {
+        color: #9ba8bd !important;
+    }
+
+    @media (max-width: 575.98px) {
+        .wallet-table {
+            overflow-x: auto;
+        }
+
+        .wallet-table table {
+            min-width: 620px;
+        }
+    }
+</style>
+
+<h3>Your Wallet</h3>
+
+<div class="wallet-balance">
+    <h4>💰 Balance: {{ profile.credits }} credits</h4>
+</div>
+
+<div class="wallet-table">
+    <table class="table table-striped">
+
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Amount</th>
+                <th>Note</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for t in transactions %}
+                <tr>
+                    <td>{{ t.created_at|date:"M d, Y H:i" }}</td>
+
+                    <td>
+                        {{ t.get_transaction_type_display }}
+                    </td>
+
+                    <td class="{% if t.amount > 0 %}text-success{% else %}text-danger{% endif %}">
+                        {{ t.amount|stringformat:"+d" }}
+                    </td>
+
+                    <td>
+                        {{ t.note }}
+                    </td>
+                </tr>
+
+            {% empty %}
+                <tr>
+                    <td colspan="4" class="text-muted">
+                        No transactions yet.
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+</div>
+
+{% endblock %}

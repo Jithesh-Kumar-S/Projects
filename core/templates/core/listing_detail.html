@@ -1,0 +1,29 @@
+{% extends "core/base.html" %}
+{% block content %}
+<div class="card skill-card shadow-sm">
+    <div class="card-body">
+        <span class="badge bg-light text-dark mb-2">{{ listing.get_category_display }}</span>
+        <h3>{{ listing.title }}</h3>
+        <p aria-label="{% if listing.review_count %}{{ listing.rating_average|floatformat:1 }} out of 5, based on {{ listing.review_count }} reviews{% else %}No reviews yet{% endif %}">
+            {% if listing.review_count %}⭐ {{ listing.rating_average|floatformat:1 }} / 5 · {{ listing.review_count }} review{{ listing.review_count|pluralize }}{% else %}No reviews yet{% endif %}
+        </p>
+        <p class="text-muted">by <a href="{% url 'public_profile' listing.user.username %}">{{ listing.user.username }}</a> · 📍 {{ listing.location|default:"anywhere" }} · ⏱ {{ listing.duration_hours }} hour(s) = {{ listing.duration_hours }} credit(s)</p>
+        <p>{{ listing.description }}</p>
+        <p><strong>Skills:</strong> {{ listing.skills }}</p>
+
+        {% if user.is_authenticated %}
+            {% if user == listing.user %}
+                <a href="{% url 'listing_edit' listing.pk %}" class="btn btn-outline-secondary">Edit</a>
+                <a href="{% url 'listing_delete' listing.pk %}" class="btn btn-outline-danger">Delete</a>
+            {% elif already_requested %}
+                <span class="badge bg-info text-dark">Request already sent</span>
+            {% else %}
+                <a href="{% url 'request_create' listing.pk %}" class="btn btn-primary">Request with Credits</a>
+                <a href="{% url 'request_direct_create' listing.pk %}" class="btn btn-outline-primary ms-2">Request Direct Exchange</a>
+            {% endif %}
+        {% else %}
+            <a href="{% url 'login' %}" class="btn btn-primary">Log in to request</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

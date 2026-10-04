@@ -1,0 +1,224 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+
+<style>
+    /* =========================================
+       SERVICE LISTING FORM
+       ========================================= */
+
+    .listing-form-card {
+        border: 1px solid #e4e9f2;
+        border-radius: 18px;
+        background: #fff;
+        box-shadow: 0 12px 34px rgba(25, 39, 75, .07);
+    }
+
+    .listing-form-card .card-body {
+        padding: 1.5rem;
+    }
+
+    .listing-form-card h4 {
+        color: #17223b;
+        font-weight: 700;
+    }
+
+    /* Django form labels */
+    .listing-form-card label {
+        display: block;
+        margin-bottom: .4rem;
+        color: #34415b;
+        font-weight: 600;
+    }
+
+    /* ALL Django generated form fields */
+    .listing-form-card input:not([type="hidden"]),
+    .listing-form-card select,
+    .listing-form-card textarea {
+        display: block;
+        width: 100%;
+        max-width: 100%;
+        padding: .65rem .8rem;
+        color: #17223b !important;
+        background-color: #fff !important;
+        border: 1px solid #dbe2ed;
+        border-radius: 11px;
+        outline: none;
+        transition: border-color .18s ease, box-shadow .18s ease,
+                    background-color .18s ease, color .18s ease;
+    }
+
+    /* Textarea sizing */
+    .listing-form-card textarea {
+        min-height: 120px;
+        resize: vertical;
+    }
+
+    /* Select */
+    .listing-form-card select {
+        min-height: 44px;
+        cursor: pointer;
+    }
+
+    /* Focus */
+    .listing-form-card input:not([type="hidden"]):focus,
+    .listing-form-card select:focus,
+    .listing-form-card textarea:focus {
+        color: #17223b !important;
+        background-color: #fff !important;
+        border-color: #8580e5;
+        box-shadow: 0 0 0 .22rem rgba(81, 70, 216, .12);
+    }
+
+    /* Placeholder */
+    .listing-form-card input::placeholder,
+    .listing-form-card textarea::placeholder {
+        color: #98a2b4 !important;
+        opacity: 1;
+    }
+
+    /* Django help text */
+    .listing-form-card .helptext {
+        display: block;
+        margin-top: .35rem;
+        color: #68758d;
+        font-size: .85rem;
+    }
+
+    /* Django validation errors */
+    .listing-form-card .errorlist {
+        margin: 0 0 .5rem;
+        padding: 0;
+        color: #b42336;
+        font-size: .875rem;
+        list-style: none;
+    }
+
+    /* =========================================
+       DARK MODE
+       ========================================= */
+
+    body.dark-mode .listing-form-card {
+        background: #1b2336;
+        border-color: #303a50;
+        box-shadow: 0 14px 34px rgba(0, 0, 0, .2);
+    }
+
+    body.dark-mode .listing-form-card h4 {
+        color: #ffffff !important;
+    }
+
+    body.dark-mode .listing-form-card label {
+        color: #dce4f3 !important;
+    }
+
+    /*
+       Important:
+       Force EVERY Django-generated field to have
+       a dark background AND light text.
+    */
+    body.dark-mode .listing-form-card input:not([type="hidden"]),
+    body.dark-mode .listing-form-card select,
+    body.dark-mode .listing-form-card textarea {
+        color: #f1f5ff !important;
+        background-color: #252f43 !important;
+        border-color: #46536b !important;
+        -webkit-text-fill-color: #f1f5ff !important;
+    }
+
+    /* Typed text */
+    body.dark-mode .listing-form-card input:not([type="hidden"]):focus,
+    body.dark-mode .listing-form-card select:focus,
+    body.dark-mode .listing-form-card textarea:focus {
+        color: #ffffff !important;
+        background-color: #29354b !important;
+        border-color: #7770e5 !important;
+        -webkit-text-fill-color: #ffffff !important;
+        box-shadow: 0 0 0 .22rem rgba(81, 70, 216, .2);
+    }
+
+    /* Placeholder in dark mode */
+    body.dark-mode .listing-form-card input::placeholder,
+    body.dark-mode .listing-form-card textarea::placeholder {
+        color: #8996ac !important;
+        -webkit-text-fill-color: #8996ac !important;
+        opacity: 1;
+    }
+
+    /* Dropdown options */
+    body.dark-mode .listing-form-card select option {
+        color: #f1f5ff;
+        background-color: #252f43;
+    }
+
+    /* Help text */
+    body.dark-mode .listing-form-card .helptext {
+        color: #9eabc0 !important;
+    }
+
+    /* Error messages */
+    body.dark-mode .listing-form-card .errorlist {
+        color: #ff8996;
+    }
+
+    /* Button */
+    .listing-form-card .btn-primary {
+        color: #fff !important;
+        opacity: 1 !important;
+    }
+
+    body.dark-mode .listing-form-card .btn-primary {
+        color: #fff !important;
+        background: linear-gradient(110deg, #655be8, #4d8ddd) !important;
+        border-color: #655be8 !important;
+        opacity: 1 !important;
+        box-shadow: 0 6px 18px rgba(81, 70, 216, .3);
+    }
+
+    body.dark-mode .listing-form-card .btn-primary:hover {
+        background: linear-gradient(110deg, #756cf0, #5b9ae8) !important;
+        border-color: #756cf0 !important;
+    }
+
+    /* Mobile */
+    @media (max-width: 575.98px) {
+        .listing-form-card .card-body {
+            padding: 1.1rem;
+        }
+    }
+</style>
+
+
+<div class="row justify-content-center">
+
+    <div class="col-md-7">
+
+        <div class="card listing-form-card shadow-sm">
+
+            <div class="card-body">
+
+                <h4 class="mb-3">
+                    {{ mode }} a Service Listing
+                </h4>
+
+                <form method="post">
+
+                    {% csrf_token %}
+
+                    {{ form.as_p }}
+
+                    <button type="submit" class="btn btn-primary">
+                        Save Listing
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,275 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+
+<style>
+    .signup-shell {
+        min-height: calc(100vh - 110px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 1rem;
+    }
+
+    .signup-card {
+        width: 100%;
+        max-width: 500px;
+        background: #fff;
+        border: 1px solid #e5e9f2;
+        border-radius: 24px;
+        padding: 2rem;
+        box-shadow: 0 24px 70px rgba(23, 37, 84, .08);
+    }
+
+    .signup-card h4 {
+        color: #17223b;
+        font-weight: 700;
+        letter-spacing: -.03em;
+    }
+
+    /* Form labels */
+    .signup-card label {
+        display: block;
+        margin-bottom: .45rem;
+        color: #334155;
+        font-size: .9rem;
+        font-weight: 600;
+    }
+
+    /* All Django generated fields */
+    .signup-card input:not([type="hidden"]),
+    .signup-card select,
+    .signup-card textarea {
+        width: 100%;
+        max-width: 100%;
+        border-radius: 12px;
+        padding: .75rem .9rem;
+        border: 1px solid #dbe2ec;
+        background: #fff;
+        color: #17223b;
+        -webkit-text-fill-color: #17223b;
+        transition:
+            border-color .2s ease,
+            box-shadow .2s ease,
+            background-color .2s ease,
+            color .2s ease;
+    }
+
+    .signup-card textarea {
+        min-height: 110px;
+        resize: vertical;
+    }
+
+    /* Focus */
+    .signup-card input:not([type="hidden"]):focus,
+    .signup-card select:focus,
+    .signup-card textarea:focus {
+        color: #17223b;
+        background: #fff;
+        -webkit-text-fill-color: #17223b;
+        border-color: #6366f1;
+        outline: none;
+        box-shadow: 0 0 0 4px #6366f11c;
+    }
+
+    /* Placeholder */
+    .signup-card input::placeholder,
+    .signup-card textarea::placeholder {
+        color: #98a2b4;
+        opacity: 1;
+    }
+
+    /* Django form spacing */
+    .signup-card form p {
+        margin-bottom: 1rem;
+    }
+
+    /* Help text */
+    .signup-card .helptext {
+        display: block;
+        margin-top: .35rem;
+        color: #68758d;
+        font-size: .82rem;
+    }
+
+    /* Error messages */
+    .signup-card .errorlist {
+        margin: .35rem 0 0;
+        padding: 0;
+        color: #b42336;
+        font-size: .85rem;
+        list-style: none;
+    }
+
+    /* =====================================================
+       DARK MODE
+       ===================================================== */
+
+    body.dark-mode .signup-card {
+        background: #1b2336;
+        border-color: #303a50;
+        box-shadow: 0 24px 70px rgba(0, 0, 0, .28);
+    }
+
+    body.dark-mode .signup-card h4 {
+        color: #f8faff !important;
+    }
+
+    body.dark-mode .signup-card label {
+        color: #dce4f3 !important;
+    }
+
+    /* All signup fields */
+    body.dark-mode .signup-card input:not([type="hidden"]),
+    body.dark-mode .signup-card select,
+    body.dark-mode .signup-card textarea {
+
+        color: #f1f5ff !important;
+        background-color: #252f43 !important;
+        border-color: #46536b !important;
+        -webkit-text-fill-color: #f1f5ff !important;
+        caret-color: #fff;
+        opacity: 1 !important;
+    }
+
+    /* Focus */
+    body.dark-mode .signup-card input:not([type="hidden"]):focus,
+    body.dark-mode .signup-card select:focus,
+    body.dark-mode .signup-card textarea:focus {
+
+        color: #fff !important;
+        background-color: #29354b !important;
+        border-color: #7770e5 !important;
+        -webkit-text-fill-color: #fff !important;
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, .20) !important;
+    }
+
+    /* Placeholder */
+    body.dark-mode .signup-card input::placeholder,
+    body.dark-mode .signup-card textarea::placeholder {
+
+        color: #8996ac !important;
+        -webkit-text-fill-color: #8996ac !important;
+        opacity: 1 !important;
+    }
+
+    /* Dropdown */
+    body.dark-mode .signup-card select option {
+        color: #f1f5ff !important;
+        background-color: #252f43 !important;
+    }
+
+    /* Help text */
+    body.dark-mode .signup-card .helptext {
+        color: #9eabc0 !important;
+    }
+
+    /* Errors */
+    body.dark-mode .signup-card .errorlist {
+        color: #ff8996 !important;
+    }
+
+    /* Checkbox */
+    body.dark-mode .signup-card input[type="checkbox"] {
+        accent-color: #655be8;
+    }
+
+    /* Button */
+    .signup-card .btn-primary {
+        border: 0;
+        border-radius: 12px;
+        padding: .8rem;
+        font-weight: 650;
+    }
+
+    body.dark-mode .signup-card .btn-primary {
+        color: #fff !important;
+        background: linear-gradient(100deg, #655be8, #159ab5) !important;
+        border-color: transparent !important;
+        opacity: 1 !important;
+    }
+
+    body.dark-mode .signup-card .btn-primary:hover {
+        background: linear-gradient(100deg, #756cf0, #1aa9c5) !important;
+    }
+
+    /* Login link */
+    .signup-card a {
+        color: #4f46e5;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .signup-card a:hover {
+        text-decoration: underline;
+    }
+
+    body.dark-mode .signup-card p {
+        color: #c3ccdc;
+    }
+
+    body.dark-mode .signup-card a {
+        color: #8580ff !important;
+    }
+
+    /* Browser autofill */
+    body.dark-mode .signup-card input:-webkit-autofill,
+    body.dark-mode .signup-card input:-webkit-autofill:hover,
+    body.dark-mode .signup-card input:-webkit-autofill:focus {
+
+        -webkit-text-fill-color: #f1f5ff !important;
+        -webkit-box-shadow: 0 0 0 1000px #252f43 inset !important;
+        box-shadow: 0 0 0 1000px #252f43 inset !important;
+        caret-color: #fff;
+    }
+
+    @media (max-width: 575.98px) {
+        .signup-shell {
+            min-height: calc(100vh - 90px);
+            padding: 1rem .75rem;
+        }
+
+        .signup-card {
+            padding: 1.25rem;
+            border-radius: 20px;
+        }
+    }
+</style>
+
+
+<div class="signup-shell">
+
+    <div class="col-md-5">
+
+        <div class="card shadow-sm signup-card">
+
+            <div class="card-body">
+
+                <h4 class="mb-3">Create your account</h4>
+
+                <form method="post">
+
+                    {% csrf_token %}
+
+                    {{ form.as_p }}
+
+                    <button type="submit" class="btn btn-primary w-100">
+                        Sign Up
+                    </button>
+
+                </form>
+
+                <p class="mt-3 text-center">
+                    Already have an account?
+                    <a href="{% url 'login' %}">Log in</a>
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

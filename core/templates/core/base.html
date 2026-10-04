@@ -1,0 +1,1001 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Local Service Barter{% endblock %}</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="{% static 'core/css/forms.css' %}"> -->
+
+
+    <style>
+        :root {
+            --ink: #17223b;
+            --muted: #68758d;
+            --brand: #5146d8;
+            --brand-dark: #3d35ad;
+            --aqua: #33c6c5;
+            --surface: #fff;
+            --line: #e4e9f2;
+            --page: #f4f6fb;
+            --shadow-soft: 0 12px 34px rgba(25, 39, 75, .07);
+            --shadow-lift: 0 18px 42px rgba(25, 39, 75, .12);
+            --radius-card: 18px;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+            color: var(--ink);
+            background:
+                radial-gradient(
+                    ellipse at 8% 0%,
+                    rgba(81,70,216,.08),
+                    transparent 32rem
+                ),
+                radial-gradient(
+                    ellipse at 96% 12%,
+                    rgba(51,198,197,.07),
+                    transparent 28rem
+                ),
+                var(--page);
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a {
+            color: var(--brand);
+            text-underline-offset: .2em;
+        }
+
+        a:hover {
+            color: var(--brand-dark);
+        }
+
+        :focus-visible {
+            outline: 3px solid rgba(81,70,216,.42);
+            outline-offset: 3px;
+        }
+
+        /* =========================
+           NAVBAR
+           ========================= */
+
+        .app-navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1030;
+            padding: .75rem 0;
+            background: rgba(20, 29, 53, .94) !important;
+            border-bottom: 1px solid rgba(255,255,255,.1);
+            box-shadow: 0 8px 30px rgba(16,24,45,.16);
+            backdrop-filter: blur(16px);
+        }
+
+        .app-navbar .navbar-brand {
+            display: inline-flex;
+            align-items: center;
+            gap: .65rem;
+            font-weight: 700;
+            letter-spacing: -.025em;
+        }
+
+        .brand-mark {
+            display: grid;
+            place-items: center;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 10px;
+            color: #fff;
+            background: linear-gradient(135deg, var(--brand), #278eb1);
+            box-shadow: 0 5px 16px rgba(81,70,216,.4);
+        }
+
+        .app-navbar .nav-link {
+            border-radius: 10px;
+            margin: 0 .12rem;
+            padding: .55rem .75rem !important;
+            color: rgba(245,247,255,.72) !important;
+            transition: color .18s ease, background .18s ease;
+        }
+
+        .app-navbar .nav-link:hover,
+        .app-navbar .nav-link.active {
+            color: #fff !important;
+            background: rgba(255,255,255,.1);
+        }
+
+        .app-navbar .nav-link.active {
+            box-shadow: inset 0 -2px var(--aqua);
+        }
+
+        .app-navbar .navbar-toggler {
+            border-color: rgba(255,255,255,.25);
+        }
+
+        .app-navbar .navbar-toggler:focus {
+            box-shadow: 0 0 0 .2rem rgba(51,198,197,.28);
+        }
+
+        .app-navbar .nav-link.disabled {
+            color: rgba(255,255,255,.58) !important;
+        }
+
+        .app-navbar .btn-link {
+            color: rgba(245,247,255,.82);
+            text-decoration: none;
+        }
+
+        .app-navbar .btn-link:hover {
+            color: #fff;
+        }
+
+        /* =========================
+           DARK MODE BUTTON
+           ========================= */
+
+        .dark-mode-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: .4rem;
+            min-height: 2.5rem;
+            padding: .5rem .75rem;
+            margin: 0 .25rem;
+            border: 1px solid rgba(255,255,255,.18);
+            border-radius: 10px;
+            color: rgba(255,255,255,.9);
+            background: rgba(255,255,255,.07);
+            cursor: pointer;
+            font-weight: 600;
+            transition:
+                background-color .2s ease,
+                border-color .2s ease,
+                transform .16s ease;
+        }
+
+        .dark-mode-toggle:hover {
+            color: #fff;
+            background: rgba(255,255,255,.15);
+            border-color: rgba(255,255,255,.3);
+            transform: translateY(-1px);
+        }
+
+        .dark-mode-toggle:active {
+            transform: translateY(0);
+        }
+
+        .dark-mode-toggle .dark-icon {
+            font-size: 1rem;
+            line-height: 1;
+        }
+
+        /* =========================
+           MAIN
+           ========================= */
+
+        .app-main {
+            animation: page-arrive .32s ease-out both;
+        }
+
+        .app-main > .container {
+            max-width: 1180px;
+            padding-top: 1.1rem;
+            padding-bottom: 2.5rem;
+        }
+
+        /* =========================
+           CARDS
+           ========================= */
+
+        .card {
+            border: 1px solid var(--line);
+            border-radius: var(--radius-card);
+            background: var(--surface);
+            box-shadow: var(--shadow-soft);
+            transition:
+                transform .2s ease,
+                box-shadow .2s ease,
+                border-color .2s ease;
+        }
+
+        .card:hover {
+            border-color: #d8deeb;
+            box-shadow: var(--shadow-lift);
+        }
+
+        .card-body {
+            padding: 1.35rem;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .card h1,
+        .card h2,
+        .card h3,
+        .card h4,
+        .card h5,
+        .card h6,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5 {
+            color: var(--ink);
+            letter-spacing: -.025em;
+        }
+
+        .text-muted {
+            color: var(--muted) !important;
+        }
+
+        /* =========================
+           BUTTONS
+           ========================= */
+
+        .btn {
+            min-height: 2.5rem;
+            border-radius: 11px;
+            font-weight: 600;
+            transition:
+                transform .16s ease,
+                box-shadow .16s ease,
+                background-color .16s ease,
+                border-color .16s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary {
+            border-color: var(--brand);
+            background: linear-gradient(110deg, var(--brand), #427acb);
+            box-shadow: 0 5px 14px rgba(81,70,216,.18);
+        }
+
+        .btn-primary:hover,
+        .btn-primary:focus {
+            border-color: var(--brand-dark);
+            background: linear-gradient(110deg, var(--brand-dark), #3568b3);
+            box-shadow: 0 8px 20px rgba(81,70,216,.25);
+        }
+
+        .btn-outline-primary {
+            color: var(--brand);
+            border-color: #c9c9f0;
+        }
+
+        .btn-outline-primary:hover {
+            color: #fff;
+            border-color: var(--brand);
+            background: var(--brand);
+        }
+
+        .btn-outline-secondary {
+            border-color: #d6dce7;
+            color: #48566f;
+        }
+
+        /* =========================
+           FORMS
+           ========================= */
+
+        .form-control,
+        .form-select {
+            min-height: 2.75rem;
+            border: 1px solid #dbe2ed;
+            border-radius: 11px;
+            color: var(--ink);
+            background-color: #fff;
+            transition:
+                border-color .18s ease,
+                box-shadow .18s ease,
+                background-color .18s ease;
+        }
+
+        form input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"]):not([type="submit"]),
+        form select,
+        form textarea {
+            max-width: 100%;
+            border: 1px solid #dbe2ed;
+            border-radius: 11px;
+            color: var(--ink);
+            background-color: #fff;
+            transition: border-color .18s ease, box-shadow .18s ease;
+        }
+
+        form input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"]):not([type="submit"]):focus,
+        form select:focus,
+        form textarea:focus {
+            border-color: #8580e5;
+            box-shadow: 0 0 0 .22rem rgba(81,70,216,.12);
+        }
+
+        input[type="checkbox"],
+        input[type="radio"] {
+            accent-color: var(--brand);
+        }
+
+        textarea.form-control {
+            min-height: auto;
+        }
+
+        .form-control::placeholder {
+            color: #98a2b4;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #8580e5;
+            box-shadow: 0 0 0 .22rem rgba(81,70,216,.12);
+        }
+
+        .form-label,
+        label {
+            color: #34415b;
+            font-weight: 600;
+        }
+
+        /* =========================
+           BADGES / ALERTS
+           ========================= */
+
+        .badge {
+            padding: .48em .72em;
+            border-radius: 999px;
+            font-weight: 650;
+            letter-spacing: .01em;
+        }
+
+        .credit-badge {
+            font-size: .95rem;
+            padding: .6em .85em;
+        }
+
+        .alert {
+            border: 1px solid transparent;
+            border-radius: 14px;
+            box-shadow: 0 5px 16px rgba(25,39,75,.04);
+        }
+
+        .alert-error {
+            color: #842b39;
+            background: #fde7ea;
+            border-color: #f7c9d0;
+        }
+
+        /* =========================
+           LIST / TABLE
+           ========================= */
+
+        .list-group-item {
+            border-color: var(--line);
+            padding: .85rem 1rem;
+        }
+
+        .table {
+            --bs-table-bg: #fff;
+            --bs-table-striped-bg: #f7f8fc;
+            border-color: var(--line);
+        }
+
+        .table thead th {
+            color: #59667e;
+            font-size: .8rem;
+            letter-spacing: .04em;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        /* =========================
+           HERO
+           ========================= */
+
+        .hero-panel {
+            position: relative;
+            isolation: isolate;
+            overflow: hidden;
+            padding: clamp(2rem, 6vw, 4.5rem) !important;
+            border: 1px solid rgba(255,255,255,.16);
+            border-radius: 26px !important;
+            color: #fff;
+            background:
+                radial-gradient(
+                    ellipse at 88% 12%,
+                    rgba(69,205,207,.28),
+                    transparent 35%
+                ),
+                linear-gradient(
+                    125deg,
+                    #182541 5%,
+                    #29366b 58%,
+                    #3d50a0 100%
+                ) !important;
+            box-shadow: 0 24px 55px rgba(25,39,75,.2) !important;
+        }
+
+        .hero-panel::after {
+            content: "";
+            position: absolute;
+            z-index: -1;
+            width: 17rem;
+            height: 17rem;
+            right: -5rem;
+            bottom: -11rem;
+            border: 1px solid rgba(255,255,255,.16);
+            border-radius: 50%;
+            box-shadow:
+                0 0 0 2rem rgba(255,255,255,.035),
+                0 0 0 4rem rgba(255,255,255,.025);
+        }
+
+        .hero-panel h1,
+        .hero-panel .lead {
+            color: #fff;
+        }
+
+        .hero-panel .lead {
+            max-width: 48rem;
+            color: rgba(244,247,255,.78);
+        }
+
+        .hero-panel .btn-outline-secondary {
+            color: #fff;
+            border-color: rgba(255,255,255,.42);
+        }
+
+        .hero-panel .btn-outline-secondary:hover {
+            color: #1d2946;
+            background: #fff;
+            border-color: #fff;
+        }
+
+        /* =========================
+           OTHER COMPONENTS
+           ========================= */
+
+        .empty-state {
+            padding: 1.5rem;
+            border: 1px dashed #ccd4e2;
+            border-radius: 16px;
+            color: var(--muted);
+            background: rgba(255,255,255,.65);
+        }
+
+        .exchange-status-pending {
+            color: #80560b !important;
+            background: #fff3cd !important;
+        }
+
+        .exchange-status-accepted,
+        .exchange-status-scheduled {
+            color: #17517e !important;
+            background: #dff2ff !important;
+        }
+
+        .exchange-status-completed {
+            color: #12613e !important;
+            background: #d9f5e6 !important;
+        }
+
+        .exchange-status-rejected,
+        .exchange-status-disputed {
+            color: #922d3b !important;
+            background: #fde4e7 !important;
+        }
+
+        .exchange-status-cancelled {
+            color: #596579 !important;
+            background: #e9edf3 !important;
+        }
+
+        .completion-panel {
+            border-color: #d7def1;
+            background: linear-gradient(145deg, #fff, #f6f8ff);
+        }
+
+        .profile-hero {
+            background: linear-gradient(135deg, #fff, #f4f6ff);
+        }
+
+        .review-card {
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .review-card:last-child {
+            border-bottom: 0;
+        }
+
+        .rating-mark {
+            color: #b77912;
+            font-weight: 700;
+        }
+
+        .onboard-card,
+        .auth-card,
+        .direct-card {
+            box-shadow: var(--shadow-lift) !important;
+        }
+
+        /* =========================
+           DARK MODE
+           ========================= */
+
+        body.dark-mode {
+            --ink: #edf2ff;
+            --muted: #aeb9ce;
+            --surface: #1b2336;
+            --line: #303a50;
+            --page: #0f1524;
+
+            color: var(--ink);
+
+            background:
+                radial-gradient(
+                    ellipse at 8% 0%,
+                    rgba(81,70,216,.16),
+                    transparent 32rem
+                ),
+                radial-gradient(
+                    ellipse at 96% 12%,
+                    rgba(51,198,197,.10),
+                    transparent 28rem
+                ),
+                var(--page);
+        }
+
+        body.dark-mode .card {
+            background: #1b2336;
+            border-color: #303a50;
+            color: #edf2ff;
+        }
+
+        body.dark-mode .card:hover {
+            border-color: #414d67;
+        }
+
+        body.dark-mode h1,
+        body.dark-mode h2,
+        body.dark-mode h3,
+        body.dark-mode h4,
+        body.dark-mode h5,
+        body.dark-mode h6,
+        body.dark-mode .card h1,
+        body.dark-mode .card h2,
+        body.dark-mode .card h3,
+        body.dark-mode .card h4,
+        body.dark-mode .card h5,
+        body.dark-mode .card h6 {
+            color: #edf2ff;
+        }
+
+        body.dark-mode .text-muted {
+            color: #aeb9ce !important;
+        }
+
+        body.dark-mode a {
+            color: #9994ff;
+        }
+
+        body.dark-mode a:hover {
+            color: #b5b1ff;
+        }
+
+        body.dark-mode .form-control,
+        body.dark-mode .form-select,
+        body.dark-mode input,
+        body.dark-mode textarea,
+        body.dark-mode select {
+            color: #edf2ff;
+            background-color: #151d2e;
+            border-color: #39455d;
+        }
+
+        body.dark-mode .form-control::placeholder {
+            color: #78859d;
+        }
+
+        body.dark-mode .form-control:focus,
+        body.dark-mode .form-select:focus,
+        body.dark-mode input:focus,
+        body.dark-mode textarea:focus,
+        body.dark-mode select:focus {
+            color: #fff;
+            background-color: #182136;
+            border-color: #8580e5;
+            box-shadow: 0 0 0 .22rem rgba(81,70,216,.2);
+        }
+
+        body.dark-mode label,
+        body.dark-mode .form-label {
+            color: #d8dfef;
+        }
+
+        body.dark-mode .table {
+            --bs-table-bg: #1b2336;
+            --bs-table-color: #edf2ff;
+            --bs-table-striped-bg: #202a3e;
+            --bs-table-border-color: #303a50;
+            color: #edf2ff;
+        }
+
+        body.dark-mode .table thead th {
+            color: #aeb9ce;
+        }
+
+        body.dark-mode .list-group-item {
+            background: #1b2336;
+            color: #edf2ff;
+            border-color: #303a50;
+        }
+
+        body.dark-mode .empty-state {
+            color: #aeb9ce;
+            background: rgba(27,35,54,.75);
+            border-color: #414d67;
+        }
+
+        body.dark-mode .profile-hero,
+        body.dark-mode .completion-panel {
+            background: linear-gradient(145deg, #1b2336, #202a42);
+            border-color: #303a50;
+        }
+
+        body.dark-mode .app-navbar {
+            background: rgba(10,15,28,.97) !important;
+        }
+
+        @keyframes page-arrive {
+            from {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* =========================
+           RESPONSIVE
+           ========================= */
+
+        @media (max-width: 991.98px) {
+            .app-navbar .navbar-collapse {
+                padding-top: .75rem;
+            }
+
+            .app-navbar .nav-link {
+                margin: .1rem 0;
+            }
+
+            .dark-mode-toggle {
+                width: 100%;
+                justify-content: flex-start;
+                margin: .5rem 0;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .app-main > .container {
+                padding-top: .65rem;
+                padding-bottom: 1.5rem;
+            }
+
+            .card-body {
+                padding: 1.1rem;
+            }
+
+            .hero-panel {
+                border-radius: 20px !important;
+            }
+
+            .hero-panel .btn {
+                width: 100%;
+                margin: .2rem 0 !important;
+            }
+
+            .table {
+                display: block;
+                max-width: 100%;
+                overflow-x: auto;
+            }
+
+            .btn-group {
+                gap: .4rem;
+            }
+
+            .btn-group > .btn,
+            .btn-group > form {
+                border-radius: 10px !important;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                animation-duration: .01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: .01ms !important;
+            }
+        }
+    </style>
+
+    <!-- Apply saved dark mode before the page displays -->
+    <script>
+        (function () {
+            try {
+                if (localStorage.getItem("darkMode") === "enabled") {
+                    document.documentElement.classList.add("dark-mode-preload");
+                }
+            } catch (e) {}
+        })();
+    </script>
+
+    <style>
+        /* Prevent a flash when dark mode is saved */
+        html.dark-mode-preload body {
+            background: #0f1524 !important;
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark app-navbar mb-4" aria-label="Main navigation">
+
+    <div class="container">
+
+        <a class="navbar-brand" href="{% url 'home' %}">
+            <span class="brand-mark" aria-hidden="true">↔</span>
+            Barter Platform
+        </a>
+
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navMenu"
+            aria-controls="navMenu"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navMenu">
+
+            <ul class="navbar-nav me-auto">
+
+                <li class="nav-item">
+                    <a
+                        class="nav-link {% if request.resolver_match.url_name == 'listing_list' %}active{% endif %}"
+                        {% if request.resolver_match.url_name == 'listing_list' %}aria-current="page"{% endif %}
+                        href="{% url 'listing_list' %}"
+                    >
+                        Browse Services
+                    </a>
+                </li>
+
+                {% if user.is_authenticated %}
+
+                <li class="nav-item">
+                    <a
+                        class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}"
+                        {% if request.resolver_match.url_name == 'dashboard' %}aria-current="page"{% endif %}
+                        href="{% url 'dashboard' %}"
+                    >
+                        Dashboard
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a
+                        class="nav-link {% if request.resolver_match.url_name == 'request_list' or request.resolver_match.url_name == 'request_detail' %}active{% endif %}"
+                        href="{% url 'request_list' %}"
+                    >
+                        My Exchanges
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a
+                        class="nav-link {% if request.resolver_match.url_name == 'wallet' %}active{% endif %}"
+                        href="{% url 'wallet' %}"
+                    >
+                        Wallet
+                    </a>
+                </li>
+
+                {% if user.is_staff %}
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'admin_analytics' %}">
+                        Analytics
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/">
+                        Admin
+                    </a>
+                </li>
+
+                {% endif %}
+                {% endif %}
+
+            </ul>
+
+            <ul class="navbar-nav align-items-lg-center">
+
+                <!-- DARK MODE SWITCH -->
+                <li class="nav-item">
+                    <button
+                        type="button"
+                        id="darkModeToggle"
+                        class="dark-mode-toggle"
+                        aria-label="Toggle dark mode"
+                    >
+                        <span class="dark-icon" id="darkModeIcon">☾</span>
+                        <span id="darkModeText">Dark Mode</span>
+                    </button>
+                </li>
+
+                {% if user.is_authenticated %}
+
+                <li class="nav-item">
+                    <span
+                        class="nav-link disabled"
+                        aria-label="Signed in as {{ user.username }}"
+                    >
+                        Hi, {{ user.username }}
+                    </span>
+                </li>
+
+                <li class="nav-item">
+                    <form
+                        method="post"
+                        action="{% url 'logout' %}"
+                        class="d-inline"
+                    >
+                        {% csrf_token %}
+                        <button
+                            class="nav-link btn btn-link"
+                            type="submit"
+                        >
+                            Logout
+                        </button>
+                    </form>
+                </li>
+
+                {% else %}
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}">
+                        Login
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'signup' %}">
+                        Sign Up
+                    </a>
+                </li>
+
+                {% endif %}
+
+            </ul>
+
+        </div>
+    </div>
+</nav>
+
+<main class="app-main">
+
+    <div class="container mb-5">
+
+        {% if messages %}
+
+            {% for message in messages %}
+
+                <div
+                    class="alert alert-{{ message.tags }} alert-dismissible fade show"
+                    role="alert"
+                >
+                    {{ message }}
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                    ></button>
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+        {% block content %}{% endblock %}
+
+    </div>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const toggle = document.getElementById("darkModeToggle");
+    const icon = document.getElementById("darkModeIcon");
+    const text = document.getElementById("darkModeText");
+
+    /*
+     * If dark mode was already saved,
+     * enable it immediately.
+     */
+    if (localStorage.getItem("darkMode") === "enabled") {
+        document.body.classList.add("dark-mode");
+
+        icon.textContent = "☀";
+        text.textContent = "Light Mode";
+    }
+
+    /*
+     * Remove the preload class.
+     */
+    document.documentElement.classList.remove("dark-mode-preload");
+
+    /*
+     * Toggle dark mode when clicked.
+     */
+    toggle.addEventListener("click", function () {
+
+        document.body.classList.toggle("dark-mode");
+
+        const darkModeEnabled =
+            document.body.classList.contains("dark-mode");
+
+        if (darkModeEnabled) {
+
+            localStorage.setItem("darkMode", "enabled");
+
+            icon.textContent = "☀";
+            text.textContent = "Light Mode";
+
+        } else {
+
+            localStorage.setItem("darkMode", "disabled");
+
+            icon.textContent = "☾";
+            text.textContent = "Dark Mode";
+        }
+    });
+
+});
+</script>
+
+</body>
+</html>
+
+

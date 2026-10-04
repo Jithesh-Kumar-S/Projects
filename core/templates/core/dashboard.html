@@ -1,0 +1,427 @@
+
+{% extends "core/base.html" %}
+
+{% block content %}
+
+<style>
+    /* =========================================
+       DASHBOARD UI
+       ========================================= */
+
+    .new-listing-btn {
+        color: #fff !important;
+        background: linear-gradient(110deg, #5146d8, #427acb) !important;
+        border-color: #5146d8 !important;
+        opacity: 1 !important;
+        box-shadow: 0 5px 14px rgba(81, 70, 216, .22);
+    }
+
+    .new-listing-btn:hover,
+    .new-listing-btn:focus {
+        color: #fff !important;
+        background: linear-gradient(110deg, #3d35ad, #3568b3) !important;
+        border-color: #3d35ad !important;
+        opacity: 1 !important;
+        box-shadow: 0 8px 20px rgba(81, 70, 216, .3);
+    }
+
+    /* Keep New Listing bright in dark mode */
+    body.dark-mode .new-listing-btn {
+        color: #fff !important;
+        background: linear-gradient(110deg, #655be8, #4d8ddd) !important;
+        border-color: #655be8 !important;
+        opacity: 1 !important;
+        box-shadow: 0 6px 18px rgba(81, 70, 216, .35);
+    }
+
+    body.dark-mode .new-listing-btn:hover,
+    body.dark-mode .new-listing-btn:focus {
+        color: #fff !important;
+        background: linear-gradient(110deg, #756cf0, #5b9ae8) !important;
+        border-color: #756cf0 !important;
+        opacity: 1 !important;
+    }
+
+    /* Dashboard cards */
+    .dashboard-card {
+        border-radius: 15px;
+        border: 1px solid #e4e9f2;
+        transition: transform .18s ease, box-shadow .18s ease;
+    }
+
+    .dashboard-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 28px rgba(25, 39, 75, .1) !important;
+    }
+
+    /* Recommended service cards */
+    .skill-card {
+        border-radius: 15px;
+    }
+
+    .skill-card a {
+        text-decoration: none;
+    }
+
+    .skill-card a:hover {
+        text-decoration: underline;
+    }
+
+    /* Dashboard links */
+    .dashboard-link {
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    /* Empty states */
+    .empty-state {
+        margin-bottom: 0;
+    }
+
+    /* =========================================
+       DARK MODE
+       ========================================= */
+
+    body.dark-mode .dashboard-card,
+    body.dark-mode .skill-card {
+        background: #1b2336 !important;
+        border-color: #303a50 !important;
+        color: #edf2ff;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, .18) !important;
+    }
+
+    body.dark-mode .dashboard-card:hover,
+    body.dark-mode .skill-card:hover {
+        border-color: #46536d !important;
+        box-shadow: 0 14px 32px rgba(0, 0, 0, .25) !important;
+    }
+
+    body.dark-mode h3,
+    body.dark-mode h5,
+    body.dark-mode h6 {
+        color: #edf2ff !important;
+    }
+
+    body.dark-mode .text-muted {
+        color: #aeb9ce !important;
+    }
+
+    /* Recommended/listing links */
+    body.dark-mode .skill-card a,
+    body.dark-mode .dashboard-card a {
+        color: #a9a5ff;
+    }
+
+    body.dark-mode .skill-card a:hover,
+    body.dark-mode .dashboard-card a:hover {
+        color: #c0bdff;
+    }
+
+    /* People list */
+    body.dark-mode .list-group-item {
+        color: #edf2ff;
+        background: #1b2336;
+        border-color: #303a50;
+    }
+
+    body.dark-mode .list-group-item a {
+        color: #a9a5ff;
+        text-decoration: none;
+    }
+
+    body.dark-mode .list-group-item a:hover {
+        color: #c0bdff;
+        text-decoration: underline;
+    }
+
+    /* Warning alert */
+    body.dark-mode .alert-warning {
+        color: #f6d98b;
+        background: #302817;
+        border-color: #665326;
+    }
+
+    body.dark-mode .alert-warning a {
+        color: #ffd978;
+    }
+
+    /* Secondary button */
+    body.dark-mode .btn-outline-secondary {
+        color: #c5cede;
+        border-color: #56627a;
+    }
+
+    body.dark-mode .btn-outline-secondary:hover {
+        color: #fff;
+        background: #3b465c;
+        border-color: #6a7690;
+    }
+
+    /* View button */
+    body.dark-mode .btn-outline-primary {
+        color: #aaa6ff;
+        border-color: #625dc4;
+    }
+
+    body.dark-mode .btn-outline-primary:hover {
+        color: #fff;
+        background: #5146d8;
+        border-color: #5146d8;
+    }
+
+    /* Mobile */
+    @media (max-width: 575.98px) {
+        .dashboard-actions {
+            margin-top: .75rem;
+        }
+
+        .dashboard-actions .btn {
+            margin-left: .25rem !important;
+        }
+    }
+</style>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3>Your Dashboard</h3>
+
+    <div>
+        <span class="badge bg-success credit-badge">
+            💰 {{ profile.credits }} credits
+        </span>
+
+        <a href="{% url 'profile_edit' %}"
+           class="btn btn-sm btn-outline-secondary ms-2">
+            Edit Profile
+        </a>
+
+        <a href="{% url 'listing_create' %}"
+           class="btn btn-sm btn-primary ms-2 new-listing-btn">
+            + New Listing
+        </a>
+    </div>
+</div>
+
+{% if pending_received %}
+<div class="alert alert-warning">
+    You have {{ pending_received.count }} incoming request(s) waiting for a response.
+    <a href="{% url 'request_list' %}">
+        Review them &raquo;
+    </a>
+</div>
+{% endif %}
+
+<div class="row">
+
+    <div class="col-md-7">
+
+        <h5>🔮 Recommended for you</h5>
+
+        <p class="text-muted small">
+            Matched to your "skills needed" using ML (TF-IDF + cosine similarity).
+        </p>
+
+        {% for listing in recommended_listings %}
+
+        <div class="card skill-card dashboard-card mb-2 shadow-sm">
+
+            <div class="card-body py-2">
+
+                <div class="d-flex justify-content-between">
+
+                    <div>
+
+                        <a href="{% url 'listing_detail' listing.pk %}">
+                            <strong>{{ listing.title }}</strong>
+                        </a>
+
+                        <div class="small text-muted">
+                            by {{ listing.user.username }} ·
+                            {{ listing.get_category_display }}
+                        </div>
+
+                        <div class="small"
+                             aria-label="{% if listing.review_count %}{{ listing.rating_average|floatformat:1 }} out of 5, based on {{ listing.review_count }} reviews{% else %}No reviews yet{% endif %}">
+
+                            {% if listing.review_count %}
+
+                                ⭐ {{ listing.rating_average|floatformat:1 }}
+                                / 5 ·
+                                {{ listing.review_count }}
+                                review{{ listing.review_count|pluralize }}
+
+                            {% else %}
+
+                                No reviews yet
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                    <a href="{% url 'listing_detail' listing.pk %}"
+                       class="btn btn-sm btn-outline-primary align-self-center">
+
+                        View
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% empty %}
+
+        <p class="empty-state">
+            Add some “skills needed” to your profile to get matches.
+        </p>
+
+        {% endfor %}
+
+        {% if recommended_people %}
+
+        <h6 class="mt-4">
+            People whose skills match what you need
+        </h6>
+
+        <ul class="list-group">
+
+            {% for person in recommended_people %}
+
+            <li class="list-group-item">
+                <a href="{% url 'public_profile' person.username %}">
+                    {{ person.username }}
+                </a>
+            </li>
+
+            {% endfor %}
+
+        </ul>
+
+        {% endif %}
+
+    </div>
+
+    <div class="col-md-5">
+
+        <h5>Your Listings</h5>
+
+        {% for listing in my_listings %}
+
+        <div class="card dashboard-card mb-2">
+
+            <div class="card-body py-2 d-flex justify-content-between align-items-center">
+
+                <div>
+
+                    <a href="{% url 'listing_detail' listing.pk %}">
+                        {{ listing.title }}
+                    </a>
+
+                    <div class="small text-muted">
+
+                        {% if listing.review_count %}
+
+                            ⭐ {{ listing.rating_average|floatformat:1 }}
+                            / 5 ·
+                            {{ listing.review_count }}
+                            review{{ listing.review_count|pluralize }}
+
+                        {% else %}
+
+                            No reviews yet
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+                <span class="badge
+                    {% if listing.is_active %}
+                        bg-success
+                    {% else %}
+                        bg-secondary
+                    {% endif %}">
+
+                    {% if listing.is_active %}
+                        active
+                    {% else %}
+                        inactive
+                    {% endif %}
+
+                </span>
+
+            </div>
+
+        </div>
+
+        {% empty %}
+
+        <p class="empty-state">
+            You haven't listed any services yet.
+        </p>
+
+        {% endfor %}
+
+        <h5 class="mt-4">
+            Active Exchanges
+        </h5>
+
+        {% for ex in active_exchanges %}
+
+        <div class="card dashboard-card mb-2">
+
+            <div class="card-body py-2">
+
+                <a href="{% url 'request_detail' ex.pk %}">
+
+                    {% if ex.exchange_type == "direct" %}
+
+                        {{ ex.offered_skill }} ↔ {{ ex.requested_skill }}
+
+                    {% else %}
+
+                        {{ ex.listing.title }}
+
+                    {% endif %}
+
+                </a>
+
+                {% if ex.exchange_type == "direct" %}
+
+                    <span class="badge text-bg-primary">
+                        Direct · 0 credits
+                    </span>
+
+                {% else %}
+
+                    <span class="badge text-bg-secondary">
+                        Credit
+                    </span>
+
+                {% endif %}
+
+                <span class="badge exchange-status exchange-status-{{ ex.status }}">
+                    {{ ex.get_status_display }}
+                </span>
+
+            </div>
+
+        </div>
+
+        {% empty %}
+
+        <p class="empty-state">
+            No active exchanges right now.
+        </p>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}

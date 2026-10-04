@@ -1,0 +1,429 @@
+
+{% extends "core/base.html" %}
+{% block content %}
+
+<style>
+    /* =====================================================
+       BROWSE SERVICES
+       ===================================================== */
+
+    .browse-filter input.form-control,
+    .browse-filter select.form-select {
+        border-radius: 11px;
+        border: 1px solid #dbe2ed;
+        background-color: #fff;
+        color: #17223b;
+        -webkit-text-fill-color: #17223b;
+        transition:
+            border-color .18s ease,
+            box-shadow .18s ease,
+            background-color .18s ease,
+            color .18s ease;
+    }
+
+    .browse-filter input.form-control {
+        min-height: 2.75rem;
+    }
+
+    .browse-filter select.form-select {
+        min-height: 2.75rem;
+    }
+
+    .browse-filter input.form-control::placeholder {
+        color: #98a2b4;
+        opacity: 1;
+    }
+
+    .browse-filter input.form-control:focus,
+    .browse-filter select.form-select:focus {
+        color: #17223b;
+        background-color: #fff;
+        -webkit-text-fill-color: #17223b;
+        border-color: #7770e5;
+        outline: none;
+        box-shadow: 0 0 0 .22rem rgba(81,70,216,.12);
+    }
+
+    .browse-filter select.form-select option {
+        color: #17223b;
+        background-color: #fff;
+    }
+
+    /* =====================================================
+       DARK MODE - FILTERS
+       ===================================================== */
+
+    body.dark-mode .browse-filter input.form-control,
+    body.dark-mode .browse-filter select.form-select {
+        color: #f1f5ff !important;
+        background-color: #252f43 !important;
+        border-color: #46536b !important;
+        -webkit-text-fill-color: #f1f5ff !important;
+        caret-color: #fff !important;
+        opacity: 1 !important;
+    }
+
+    body.dark-mode .browse-filter input.form-control:focus,
+    body.dark-mode .browse-filter select.form-select:focus {
+        color: #fff !important;
+        background-color: #29354b !important;
+        border-color: #7770e5 !important;
+        -webkit-text-fill-color: #fff !important;
+        box-shadow: 0 0 0 .22rem rgba(99,102,241,.20) !important;
+    }
+
+    body.dark-mode .browse-filter input.form-control::placeholder {
+        color: #8996ac !important;
+        -webkit-text-fill-color: #8996ac !important;
+        opacity: 1 !important;
+    }
+
+    body.dark-mode .browse-filter select.form-select option {
+        color: #f1f5ff !important;
+        background-color: #252f43 !important;
+    }
+
+    /* =====================================================
+       DARK MODE - LISTING CARDS
+       ===================================================== */
+
+    body.dark-mode .skill-card {
+        background: #1b2336 !important;
+        border-color: #303a50 !important;
+    }
+
+    body.dark-mode .skill-card h5 {
+        color: #f1f5ff !important;
+    }
+
+    body.dark-mode .skill-card .text-muted {
+        color: #9eabc0 !important;
+    }
+
+    body.dark-mode .skill-card p {
+        color: #c8d1e0;
+    }
+
+    body.dark-mode .skill-card .badge.bg-light {
+        color: #dce4f3 !important;
+        background-color: #303b51 !important;
+    }
+
+    /* Provider link */
+
+    body.dark-mode .skill-card a {
+        color: #8580ff;
+    }
+
+    body.dark-mode .skill-card a:hover {
+        color: #aaa6ff;
+    }
+
+    /* View button */
+
+    body.dark-mode .skill-card .btn-outline-primary {
+        color: #9b96ff !important;
+        border-color: #6661c7 !important;
+        background: transparent !important;
+    }
+
+    body.dark-mode .skill-card .btn-outline-primary:hover {
+        color: #fff !important;
+        background: #5146d8 !important;
+        border-color: #5146d8 !important;
+    }
+
+    /* =====================================================
+       DARK MODE - CLEAR SEARCH LINK
+       ===================================================== */
+
+    body.dark-mode a[href*="listing_list"] {
+        color: #918cff;
+    }
+
+    body.dark-mode a[href*="listing_list"]:hover {
+        color: #b0acff;
+    }
+
+    /* =====================================================
+       DARK MODE - EMPTY STATE
+       ===================================================== */
+
+    body.dark-mode .empty-state {
+        color: #9eabc0 !important;
+        background: rgba(27,35,54,.75) !important;
+        border-color: #46536b !important;
+    }
+
+    /* =====================================================
+       DARK MODE - SEARCH BUTTON
+       ===================================================== */
+
+    body.dark-mode .browse-filter .btn-primary {
+        color: #fff !important;
+        background: linear-gradient(110deg,#655be8,#159ab5) !important;
+        border-color: transparent !important;
+        opacity: 1 !important;
+    }
+
+    body.dark-mode .browse-filter .btn-primary:hover {
+        background: linear-gradient(110deg,#756cf0,#1aa9c5) !important;
+    }
+
+    /* =====================================================
+       AUTOFILL FIX
+       ===================================================== */
+
+    body.dark-mode .browse-filter input:-webkit-autofill,
+    body.dark-mode .browse-filter input:-webkit-autofill:hover,
+    body.dark-mode .browse-filter input:-webkit-autofill:focus {
+        -webkit-text-fill-color: #f1f5ff !important;
+        -webkit-box-shadow: 0 0 0 1000px #252f43 inset !important;
+        box-shadow: 0 0 0 1000px #252f43 inset !important;
+        caret-color: #fff !important;
+    }
+
+    @media (max-width: 575.98px) {
+        .browse-filter input.form-control,
+        .browse-filter select.form-select {
+            min-height: 2.7rem;
+        }
+    }
+</style>
+
+<h3 class="mb-3">Browse Services</h3>
+
+<form method="get" class="row g-2 mb-4 browse-filter">
+
+    <div class="col-12 col-sm-6 col-md-3">
+        <label class="visually-hidden" for="listing-search">
+            Search skills
+        </label>
+
+        <input
+            id="listing-search"
+            type="text"
+            name="q"
+            value="{{ query }}"
+            class="form-control"
+            placeholder="Search title, description, skills..."
+        >
+    </div>
+
+    <div class="col-6 col-sm-3 col-md-2">
+        <label class="visually-hidden" for="listing-category">
+            Category
+        </label>
+
+        <select
+            id="listing-category"
+            name="category"
+            class="form-select"
+        >
+            <option value="">
+                All categories
+            </option>
+
+            {% for key, label in categories %}
+            <option
+                value="{{ key }}"
+                {% if category == key %}selected{% endif %}
+            >
+                {{ label }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="col-6 col-sm-3 col-md-2">
+        <label class="visually-hidden" for="listing-location">
+            Location
+        </label>
+
+        <input
+            id="listing-location"
+            type="text"
+            name="location"
+            value="{{ location }}"
+            class="form-control"
+            placeholder="Location"
+        >
+    </div>
+
+    <div class="col-6 col-sm-4 col-md-2">
+        <label class="visually-hidden" for="listing-sort">
+            Sort by
+        </label>
+
+        <select
+            id="listing-sort"
+            name="sort"
+            class="form-select"
+            aria-label="Sort results by"
+        >
+            <option
+                value="relevance"
+                {% if sort_by == "relevance" %}selected{% endif %}
+            >
+                Relevance
+            </option>
+
+            <option
+                value="rating"
+                {% if sort_by == "rating" %}selected{% endif %}
+            >
+                Highest Rated
+            </option>
+
+            <option
+                value="reviews"
+                {% if sort_by == "reviews" %}selected{% endif %}
+            >
+                Most Reviewed
+            </option>
+
+            <option
+                value="newest"
+                {% if sort_by == "newest" %}selected{% endif %}
+            >
+                Newest
+            </option>
+
+            <option
+                value="oldest"
+                {% if sort_by == "oldest" %}selected{% endif %}
+            >
+                Oldest
+            </option>
+        </select>
+    </div>
+
+    <div class="col-6 col-sm-4 col-md-2">
+        <label class="visually-hidden" for="listing-min-rating">
+            Minimum rating
+        </label>
+
+        <select
+            id="listing-min-rating"
+            name="min_rating"
+            class="form-select"
+            aria-label="Minimum rating"
+        >
+            <option
+                value=""
+                {% if not min_rating %}selected{% endif %}
+            >
+                Any rating
+            </option>
+
+            <option
+                value="3"
+                {% if min_rating == "3" %}selected{% endif %}
+            >
+                3★ and above
+            </option>
+
+            <option
+                value="4"
+                {% if min_rating == "4" %}selected{% endif %}
+            >
+                4★ and above
+            </option>
+
+            <option
+                value="4.5"
+                {% if min_rating == "4.5" %}selected{% endif %}
+            >
+                4.5★ and above
+            </option>
+        </select>
+    </div>
+
+    <div class="col-6 col-sm-2 col-md-1">
+        <button
+            class="btn btn-primary w-100"
+            type="submit"
+        >
+            Go
+        </button>
+    </div>
+
+</form>
+
+<p class="small mt-2 mb-3">
+    <a href="{% url 'listing_list' %}">
+        Clear search and filters
+    </a>
+</p>
+
+<div class="row">
+
+    {% for listing in listings %}
+
+    <div class="col-md-4 mb-3">
+
+        <div class="card skill-card h-100 shadow-sm">
+
+            <div class="card-body">
+
+                <span class="badge bg-light text-dark mb-2">
+                    {{ listing.get_category_display }}
+                </span>
+
+                <h5>
+                    {{ listing.title }}
+                </h5>
+
+                <p
+                    class="small mb-2"
+                    aria-label="{% if listing.review_count %}{{ listing.rating_average|floatformat:1 }} out of 5, based on {{ listing.review_count }} reviews{% else %}No reviews yet{% endif %}"
+                >
+                    {% if listing.review_count %}
+                        ⭐ {{ listing.rating_average|floatformat:1 }} / 5 ·
+                        {{ listing.review_count }}
+                        review{{ listing.review_count|pluralize }}
+                    {% else %}
+                        No reviews yet
+                    {% endif %}
+                </p>
+
+                <p class="small">
+                    Provider:
+                    <a href="{% url 'public_profile' listing.user.username %}">
+                        {{ listing.user.username }}
+                    </a>
+                </p>
+
+                <p class="text-muted small">
+                    {{ listing.description|truncatewords:15 }}
+                </p>
+
+                <p class="small">
+                    ⏱ {{ listing.duration_hours }}h ·
+                    📍 {{ listing.location|default:"anywhere" }}
+                </p>
+
+                <a
+                    href="{% url 'listing_detail' listing.pk %}"
+                    class="btn btn-sm btn-outline-primary"
+                >
+                    View
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {% empty %}
+
+    <p class="empty-state col-12">
+        No skills match your current search and filters.
+    </p>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}

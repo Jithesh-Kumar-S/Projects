@@ -1,0 +1,40 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+
+<style> /* ========================================= EDIT PROFILE - DARK MODE ========================================= */ body.dark-mode .profile-card { background: #1b2336 !important; border-color: #354158 !important; color: #edf2ff !important; } /* Heading */ body.dark-mode .profile-card h4 { color: #ffffff !important; } /* Description */ body.dark-mode .profile-card .text-muted { color: #aeb9ce !important; } /* ========================================= FORM LABELS ========================================= */ body.dark-mode .profile-card form label { color: #e5ebf7 !important; } /* ========================================= FORM INPUTS ========================================= */ body.dark-mode .profile-card form input, body.dark-mode .profile-card form textarea, body.dark-mode .profile-card form select { color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; background-color: #111827 !important; border: 1px solid #46536d !important; border-radius: 11px; } /* Textarea size */ body.dark-mode .profile-card form textarea { min-height: 120px; } /* ========================================= PLACEHOLDER TEXT ========================================= */ body.dark-mode .profile-card form input::placeholder, body.dark-mode .profile-card form textarea::placeholder { color: #8996ad !important; opacity: 1; } /* ========================================= INPUT FOCUS ========================================= */ body.dark-mode .profile-card form input:focus, body.dark-mode .profile-card form textarea:focus, body.dark-mode .profile-card form select:focus { color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; background-color: #172033 !important; border-color: #8b86f0 !important; box-shadow: 0 0 0 .22rem rgba(81, 70, 216, .22) !important; outline: none; } /* ========================================= SELECT DROPDOWN ========================================= */ body.dark-mode .profile-card form select option { color: #ffffff !important; background-color: #111827 !important; } /* ========================================= HELP TEXT ========================================= */ body.dark-mode .profile-card form .helptext { color: #98a6bd !important; } /* ========================================= VALIDATION ERRORS ========================================= */ body.dark-mode .profile-card form .errorlist { color: #ff8997 !important; } /* ========================================= CHECKBOXES & RADIO BUTTONS ========================================= */ body.dark-mode .profile-card form input[type="checkbox"], body.dark-mode .profile-card form input[type="radio"] { accent-color: #6c63e8; } </style> <div class="row justify-content-center">
+<div class="col-md-6">
+
+    <div class="card shadow-sm profile-card">
+
+        <div class="card-body">
+
+            <h4 class="mb-3">
+                Edit Your Profile
+            </h4>
+
+            <p class="text-muted small">
+                Update your introduction, location, and the skills you can teach or want to learn.
+            </p>
+
+            <form method="post">
+
+                {% csrf_token %}
+
+                {{ form.as_p }}
+
+                <button type="submit" class="btn btn-primary">
+                    Save
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+{% endblock %}

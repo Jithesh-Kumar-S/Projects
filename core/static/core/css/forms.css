@@ -1,0 +1,336 @@
+/* =========================================================
+   GLOBAL FORM STYLING
+   Works with the existing Barter Platform dark mode
+   ========================================================= */
+
+
+/* ---------------------------------------------------------
+   FORM LABELS
+   --------------------------------------------------------- */
+
+form label,
+.form-label {
+    display: block;
+    margin-bottom: .4rem;
+    color: #34415b;
+    font-weight: 600;
+}
+
+
+/* ---------------------------------------------------------
+   ALL FORM FIELDS
+   Covers Django form.as_p generated fields
+   --------------------------------------------------------- */
+
+form input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"]):not([type="submit"]),
+form select,
+form textarea,
+.form-control,
+.form-select {
+    width: 100%;
+    max-width: 100%;
+    min-height: 2.75rem;
+
+    padding: .65rem .8rem;
+
+    color: #17223b !important;
+    background-color: #ffffff !important;
+
+    border: 1px solid #dbe2ed;
+    border-radius: 11px;
+
+    outline: none;
+
+    transition:
+        border-color .18s ease,
+        box-shadow .18s ease,
+        background-color .18s ease,
+        color .18s ease;
+}
+
+
+/* ---------------------------------------------------------
+   TEXTAREA
+   --------------------------------------------------------- */
+
+form textarea,
+textarea.form-control {
+    min-height: 120px;
+    resize: vertical;
+}
+
+
+/* ---------------------------------------------------------
+   SELECT
+   --------------------------------------------------------- */
+
+form select,
+select.form-select {
+    cursor: pointer;
+}
+
+
+/* ---------------------------------------------------------
+   PLACEHOLDER
+   --------------------------------------------------------- */
+
+form input::placeholder,
+form textarea::placeholder,
+.form-control::placeholder {
+    color: #98a2b4 !important;
+    opacity: 1;
+}
+
+
+/* ---------------------------------------------------------
+   FOCUS
+   --------------------------------------------------------- */
+
+form input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"]):not([type="submit"]):focus,
+form select:focus,
+form textarea:focus,
+.form-control:focus,
+.form-select:focus {
+
+    color: #17223b !important;
+    background-color: #ffffff !important;
+
+    border-color: #8580e5;
+
+    box-shadow:
+        0 0 0 .22rem rgba(81, 70, 216, .12);
+
+    outline: none;
+}
+
+
+/* ---------------------------------------------------------
+   DJANGO HELP TEXT
+   --------------------------------------------------------- */
+
+form .helptext,
+form .form-text {
+    display: block;
+
+    margin-top: .35rem;
+
+    color: #68758d;
+    font-size: .85rem;
+}
+
+
+/* ---------------------------------------------------------
+   DJANGO ERROR MESSAGES
+   --------------------------------------------------------- */
+
+form .errorlist {
+    margin: 0 0 .5rem;
+    padding: 0;
+
+    color: #b42336;
+
+    font-size: .875rem;
+    list-style: none;
+}
+
+
+/* ---------------------------------------------------------
+   CHECKBOXES AND RADIO BUTTONS
+   --------------------------------------------------------- */
+
+form input[type="checkbox"],
+form input[type="radio"] {
+    width: auto;
+    min-height: auto;
+
+    accent-color: #5146d8;
+}
+
+
+/* =========================================================
+   DARK MODE
+   ========================================================= */
+
+
+/* ---------------------------------------------------------
+   LABELS
+   --------------------------------------------------------- */
+
+body.dark-mode form label,
+body.dark-mode .form-label {
+    color: #dce4f3 !important;
+}
+
+
+/* ---------------------------------------------------------
+   ALL INPUTS / SELECTS / TEXTAREAS
+   --------------------------------------------------------- */
+
+body.dark-mode form input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"]):not([type="submit"]),
+body.dark-mode form select,
+body.dark-mode form textarea,
+body.dark-mode .form-control,
+body.dark-mode .form-select {
+
+    color: #f1f5ff !important;
+
+    background-color: #252f43 !important;
+
+    border-color: #46536b !important;
+
+    -webkit-text-fill-color: #f1f5ff !important;
+}
+
+
+/* ---------------------------------------------------------
+   DARK MODE FOCUS
+   --------------------------------------------------------- */
+
+body.dark-mode form input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"]):not([type="submit"]):focus,
+body.dark-mode form select:focus,
+body.dark-mode form textarea:focus,
+body.dark-mode .form-control:focus,
+body.dark-mode .form-select:focus {
+
+    color: #ffffff !important;
+
+    background-color: #29354b !important;
+
+    border-color: #7770e5 !important;
+
+    -webkit-text-fill-color: #ffffff !important;
+
+    box-shadow:
+        0 0 0 .22rem rgba(81, 70, 216, .2);
+
+    outline: none;
+}
+
+
+/* ---------------------------------------------------------
+   DARK MODE PLACEHOLDER
+   --------------------------------------------------------- */
+
+body.dark-mode form input::placeholder,
+body.dark-mode form textarea::placeholder,
+body.dark-mode .form-control::placeholder {
+
+    color: #8996ac !important;
+
+    -webkit-text-fill-color: #8996ac !important;
+
+    opacity: 1;
+}
+
+
+/* ---------------------------------------------------------
+   DARK MODE SELECT OPTIONS
+   --------------------------------------------------------- */
+
+body.dark-mode form select option,
+body.dark-mode .form-select option {
+
+    color: #f1f5ff;
+
+    background-color: #252f43;
+}
+
+
+/* ---------------------------------------------------------
+   DARK MODE HELP TEXT
+   --------------------------------------------------------- */
+
+body.dark-mode form .helptext,
+body.dark-mode form .form-text {
+
+    color: #9eabc0 !important;
+}
+
+
+/* ---------------------------------------------------------
+   DARK MODE ERRORS
+   --------------------------------------------------------- */
+
+body.dark-mode form .errorlist {
+
+    color: #ff8996;
+}
+
+
+/* ---------------------------------------------------------
+   DARK MODE CHECKBOX / RADIO
+   --------------------------------------------------------- */
+
+body.dark-mode form input[type="checkbox"],
+body.dark-mode form input[type="radio"] {
+
+    accent-color: #756cf0;
+}
+
+
+/* =========================================================
+   DISABLED FIELDS
+   ========================================================= */
+
+form input:disabled,
+form select:disabled,
+form textarea:disabled,
+.form-control:disabled,
+.form-select:disabled {
+
+    cursor: not-allowed;
+
+    opacity: .65;
+}
+
+
+/* ---------------------------------------------------------
+   DARK MODE DISABLED FIELDS
+   --------------------------------------------------------- */
+
+body.dark-mode form input:disabled,
+body.dark-mode form select:disabled,
+body.dark-mode form textarea:disabled,
+body.dark-mode .form-control:disabled,
+body.dark-mode .form-select:disabled {
+
+    color: #8996ac !important;
+
+    background-color: #1d2638 !important;
+
+    border-color: #364157 !important;
+
+    -webkit-text-fill-color: #8996ac !important;
+}
+
+
+/* =========================================================
+   DJANGO form.as_p SPACING
+   ========================================================= */
+
+form p {
+    margin-bottom: 1rem;
+}
+
+
+form p:last-child {
+    margin-bottom: 0;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 575.98px) {
+
+    form input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"]):not([type="submit"]),
+    form select,
+    form textarea,
+    .form-control,
+    .form-select {
+
+        font-size: 16px;
+    }
+
+}

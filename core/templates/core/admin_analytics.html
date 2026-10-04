@@ -1,0 +1,22 @@
+{% extends "core/base.html" %}
+{% block content %}
+<h3 class="mb-4">Platform Analytics</h3>
+<div class="row mb-4">
+    <div class="col-md-3"><div class="card text-center p-3"><h2>{{ total_users }}</h2><p class="text-muted mb-0">Users</p></div></div>
+    <div class="col-md-3"><div class="card text-center p-3"><h2>{{ total_listings }}</h2><p class="text-muted mb-0">Listings</p></div></div>
+    <div class="col-md-3"><div class="card text-center p-3"><h2>{{ total_exchanges }}</h2><p class="text-muted mb-0">Exchanges</p></div></div>
+    <div class="col-md-3"><div class="card text-center p-3"><h2>{{ success_rate }}%</h2><p class="text-muted mb-0">Success Rate</p></div></div>
+</div>
+
+<h5>Listings by Category</h5>
+<ul class="list-group mb-4">
+    {% for label, count in category_counts.items %}
+    <li class="list-group-item d-flex justify-content-between">{{ label }} <span class="badge bg-primary rounded-pill">{{ count }}</span></li>
+    {% endfor %}
+</ul>
+
+<h5>Disputed Exchanges (need admin attention)</h5>
+{% for ex in disputed %}
+<div class="alert alert-danger">{{ ex }}</div>
+{% empty %}<p class="text-muted">None right now. 🎉</p>{% endfor %}
+{% endblock %}
